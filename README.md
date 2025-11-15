@@ -117,73 +117,26 @@ Podemos definir un archivo de operaciones.calcu donde le adjuntamos varias opera
 ./calcu < operaciones.calcu
 ```
 
-### Tareas
+## Problemas
 
-#### Recupero primer parcial
+### En Windows no compila
 
-Actualmente acepta 01 001 y 1 como el mismo número el 1. La idea es que haya una única representación.
+Lo primero es verificar que tenemos instalado flex y bison.
 
-1. ¿Dónde se define qué acepta cómo número?
-2. ¿Qué palabra le da a esa clasificación o categoría léxica?
-3. Corregirla para que no acepte números que empiecen con 0. 1 es válido, 01 o 001 no.
-4. Las variables son letras minúsculas. Identifique la categoría léxica y nombre que lada.
-5. Haga las modificaciones necesarias para que acepte mayúsculas.
-6. La Unidad de Ciencia Básicas ama calcu pero nos dijo que es confuso que a y A no sean la misma variable. Arreglelo para que considere ambas opciones iguales.
-7. Siguiendo la gramática sintáctica en calcu.y derive las siguientes expresiones:
-- 1/2
-- (1+3)/0
-8. ¿Qué tipo de gramáticas están definidas en calcu.l?
-9. ¿Qué tipo de gramáticas están definidas en calcu.y?
+Otro problema está entre flex y las llamadas al sistema de Windows a abrir archivos. Para que Windows busque en la carpeta correspondiente hay que adjuntar el prefijo .\ a la ruta del archivo de salida. 
 
-#### Recupero tp / segundo parcial
+Hay que cambiar en el Makefile la llamada.
 
-Calcu almacena valores. Por lo que en algún lado debe haber algún lugar donde guarda los valores para poder operar y mostrarlos.
-La Unidad de Ciencias Básicas (UCB) nos pide que incorporemos la operación "elevado a": 
+```Makefile
+calcu: calcu.y calcu.l
+	bison -d calcu.y
+	flex -o.\calcu.c calcu.l
+	gcc calcu.tab.c calcu.c -o calcu -lm
+```
 
-Si hacemos
-- x = 2^3
+Y si corremos a mano:
 
-Calcu debe guardar el resultado de la expresión 2^3 en x (que era 8 la última vez que revisamos).
-
-La UCB ama a calcu pero nos dice que debería verificar si vamos a dividir por 0.
-
-Otra mejora que reportaron es que solo trabaja con división entera pero al llamar a 2/3 se obtiene 0. Esto confunde a los estudiantes.
-
-1. ¿Dónde guarda los valores calcu?
-2. ¿Con que elemento del proceso de compilación se relaciona este elemento?
-3. ¿Qué archivo configura al scanner?
-4. ¿Qué archivo configura al parser?
-5. Implemente la operación "elevado a la"
-6. Implemente la verificación del denominador 0 en la división.
-7. ¿A qué etapa corresponde la validación del punto 6?
-8. Indique qué cambios hay que hacer en calcu.l para que calcu acepte numeros de tipo double.
-8. ¿Y en calcu.y para que calcu acepte numeros de tipo double?
-10. Implemente los cambios de 8 y 9. ¿Qué pasa ahora al dividir 2/3?
-
-### Recupero las dos evaluaciones
-
-Hacer todos los puntos anteriores.
-
-## Forma de entrega
-
-Modificar el archivo RESOLUCION.md con tus datos y las respuestas en las secciones dispuestas a tal fin y comentarios que creas pertinentes. Además debe estar el código, debe compilar y funcionar.
-
-Borrar las que no correspondan.
-
-## Fecha
-
-Cuando lo tengás.
-
-Fecha límite: 16/12/2024 19:00
-
-## Corrección
-
-Se realizará una breve defensa y se aclararán los puntos y se asignara una nota que será el resultado de lo entregado y las respuestas en la defensa.
-
-Fechas de defensa:
-
-- Lunes 2/12 19:00 hs - Campus
-- Lunes 9/12 19:00 hs - Campus
-- Lunes 16/12 19:00 hs - Campus
-
-¡Éxitos!
+```sh
+bison -d calcu.y
+flex -o\calcu.c calcu.l
+```
